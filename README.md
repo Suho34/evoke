@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# evoke — AI-Powered Study Notes
 
-## Getting Started
+> Transform your syllabus into structured, exam-ready study notes with AI. Powered by Google Gemini.
 
-First, run the development server:
+## Features
+
+- **Syllabus Parsing** — Supports numbered lists, bullet points, roman numerals, comma-delimited, markdown headers
+- **9-Section Notes** — Definition, Key Points, Formulas, Diagrams, Examples, Common Mistakes, Exam Tips, Mnemonics, Practice Questions
+- **Subject Personas** — Specialized prompts for DBMS, OS, CN, DSA, Maths
+- **3 Depth Levels** — Quick Review, Standard, Deep Dive
+- **Real-time Streaming** — Notes appear as they're generated
+- **PDF Export** — Professional PDF with title page, topic sections, exam callout boxes
+- **Multi-format Export** — PDF, Markdown, HTML
+- **Rate Limiting** — 10 requests/minute per IP
+- **Caching** — SHA-256 fingerprinting with LRU cache (7-day TTL)
+- **PDF Upload** — Drag & drop PDF with text extraction
+
+## Quick Start
 
 ```bash
+# 1. Clone the repo
+git clone <your-repo-url> evoke
+cd evoke
+
+# 2. Install dependencies
+npm install
+
+# 3. Set up environment variables
+cp .env.example .env.local
+# Edit .env.local and add your Gemini API key
+
+# 4. Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GOOGLE_GENERATIVE_AI_API_KEY` | ✅ | Google Gemini API key |
+| `SENTRY_DSN` | ❌ | Sentry error tracking DSN |
+| `REDIS_URL` | ❌ | Redis URL for distributed caching |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── generate/route.ts   # POST - Stream notes from Gemini
+│   │   ├── export/route.ts     # POST - Export as PDF/MD/HTML
+│   │   └── health/route.ts     # GET  - Health check
+│   ├── globals.css             # Design system
+│   ├── layout.tsx              # Root layout + fonts
+│   ├── page.tsx                # Main app page
+│   ├── error.tsx               # Error boundary
+│   └── not-found.tsx           # 404 page
+├── components/
+│   ├── InputPanel.tsx          # Main input form
+│   ├── PdfUpload.tsx           # PDF drag & drop
+│   ├── SubjectSelect.tsx       # Subject selector
+│   ├── DepthToggle.tsx         # Depth level toggle
+│   ├── NoteCard.tsx            # Single topic card
+│   ├── NoteViewer.tsx          # Notes container
+│   ├── ExportButton.tsx        # Export controls
+│   └── TopicSkeleton.tsx       # Loading skeleton
+└── lib/
+    ├── schemas.ts              # Zod validation schemas
+    ├── parse-syllabus.ts       # Syllabus text parser
+    ├── prompts.ts              # System + user prompts
+    ├── generate-pdf.ts         # PDF generation (pdf-lib)
+    ├── rate-limit.ts           # In-memory rate limiter
+    └── cache.ts                # LRU cache with fingerprinting
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### `GET /api/health`
+Health check. Returns status, cache stats, API key presence.
 
-## Deploy on Vercel
+### `POST /api/generate`
+Generate structured notes from a syllabus.
+```json
+{
+  "syllabus": "1. Normalization\n2. SQL Joins\n3. ER Diagrams",
+  "subject": "DBMS",
+  "depth": "standard"
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `POST /api/export`
+Export notes as PDF, Markdown, or HTML.
+```json
+{
+  "notes": [...],
+  "format": "pdf",
+  "subject": "DBMS",
+  "title": "DBMS Study Notes"
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript (strict)
+- **Styling**: Tailwind CSS
+- **AI**: Google Gemini via `@ai-sdk/google`
+- **Validation**: Zod
+- **PDF**: pdf-lib
+- **Analytics**: Vercel Analytics
+- **Error Tracking**: Sentry (optional)
+
+## License
+
+MIT
