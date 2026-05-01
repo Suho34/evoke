@@ -69,13 +69,6 @@ body {
   display: grid; grid-template-columns: 400px 1fr;
   flex: 1; min-height: 0;
 }
-@media (max-width: 1024px) {
-  .app-content { grid-template-columns: 1fr; height: auto; }
-  .input-side { 
-    height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border);
-  }
-  .output-side { height: auto; }
-}
 
 .input-side {
   border-right: 1px solid var(--border); overflow-y: auto;
@@ -86,8 +79,16 @@ body {
   overflow-y: auto; height: calc(100vh - 61px); padding: 48px;
   max-width: 1000px; margin: 0 auto; width: 100%;
 }
+
+@media (max-width: 1024px) {
+  .app-content { grid-template-columns: 1fr; height: auto; }
+  .input-side { 
+    height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border);
+  }
+  .output-side { height: auto; padding: 24px 16px; }
+}
+
 @media (max-width: 640px) {
-  .output-side { padding: 24px 16px; }
   .app-header { padding: 12px 16px; }
   .brand-name { font-size: 20px; }
 }
@@ -574,3 +575,39 @@ body {
   from { opacity: 0; transform: scale(0.9) translateY(20px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* --- Header Actions & Toggles --- */
+.header-actions { display: flex; align-items: center; gap: 0.75rem; }
+.header-actions-group { display: flex; gap: 0.5rem; align-items: center; }
+.modify-btn, .clear-btn { background-color: var(--zinc-800); color: var(--zinc-100); padding: 0.5rem 0.8rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--zinc-700); transition: all 0.2s; cursor: pointer; }
+.modify-btn:hover, .clear-btn:hover { background-color: var(--zinc-700); border-color: var(--zinc-600); }
+.clear-btn { color: #fca5a5; border-color: rgba(239, 68, 68, 0.2); }
+.clear-btn:hover { background-color: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); }
+
+/* --- Topic Navigator --- */
+.topic-navigator { display: none; position: sticky; top: 72px; z-index: 40; background-color: rgba(9, 9, 11, 0.9); backdrop-filter: blur(8px); padding: 0.75rem 1rem; border-bottom: 1px solid var(--zinc-800); margin: 0 -1rem 1rem -1rem; align-items: center; gap: 0.75rem; overflow-x: auto; scrollbar-width: none; }
+.topic-navigator::-webkit-scrollbar { display: none; }
+.topic-nav-label { font-size: 0.7rem; text-transform: uppercase; color: var(--zinc-500); font-weight: 700; letter-spacing: 0.05em; white-space: nowrap; }
+.topic-nav-items { display: flex; gap: 0.5rem; align-items: center; }
+.topic-nav-item { min-width: 2.25rem; height: 2.25rem; border-radius: var(--radius-sm); background-color: var(--zinc-900); border: 1px solid var(--zinc-800); color: var(--zinc-400); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all 0.2s; cursor: pointer; }
+.topic-nav-item:hover { border-color: var(--zinc-700); color: var(--zinc-200); }
+.topic-nav-item.active { background-color: var(--indigo-600); border-color: var(--indigo-500); color: white; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
+.nav-loader { color: var(--indigo-400); font-weight: bold; animation: pulse 1.5s infinite; padding-left: 0.5rem; }
+
+/* --- Responsive Layout --- */
+@media (max-width: 1024px) {
+  .topic-navigator { display: flex; }
+  .app-content.input-hidden .output-side { max-width: 100%; width: 100%; }
+  .mobile-only-header { display: flex; justify-content: flex-end; padding-bottom: 1rem; border-bottom: 1px solid var(--zinc-800); margin-bottom: 1rem; }
+  .close-input-btn { background: var(--zinc-900); border: 1px solid var(--zinc-800); color: var(--zinc-400); padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+  .hide-mobile { display: none; }
+}
+@media (min-width: 1025px) { .mobile-only-header { display: none; } }
+
+/* --- Settings Collapsible --- */
+.settings-collapsible { margin-top: 1.5rem; border-top: 1px solid var(--zinc-800); padding-top: 1rem; }
+.settings-toggle { background: none; border: none; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; cursor: pointer; color: var(--zinc-400); font-size: 0.85rem; font-weight: 600; }
+.settings-toggle:hover { color: var(--zinc-200); }
+.toggle-icon { transition: transform 0.2s; font-size: 1.1rem; }
+.toggle-icon.open { transform: rotate(180deg); }
+

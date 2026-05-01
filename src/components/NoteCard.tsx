@@ -11,12 +11,12 @@ interface NoteCardProps {
   isRegenerating?: boolean;
 }
 
-export default function NoteCard({ 
-  topicNote, 
-  index, 
-  onUpdate, 
-  onRegenerate, 
-  isRegenerating 
+export default function NoteCard({
+  topicNote,
+  index,
+  onUpdate,
+  onRegenerate,
+  isRegenerating
 }: NoteCardProps) {
   const { topic, notes } = topicNote;
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
@@ -24,7 +24,7 @@ export default function NoteCard({
   );
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedNotes, setEditedNotes] = useState(notes);
 
@@ -137,9 +137,9 @@ export default function NoteCard({
             <button className="action-btn" onClick={() => setIsEditing(true)} title="Edit topic">✎</button>
           )}
           {onRegenerate && (
-            <button 
-              className="action-btn" 
-              onClick={() => onRegenerate(index, topic)} 
+            <button
+              className="action-btn"
+              onClick={() => onRegenerate(index, topic)}
               title="Regenerate this topic"
               disabled={isRegenerating}
             >

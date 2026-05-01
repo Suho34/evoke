@@ -293,13 +293,13 @@ export default function Home() {
                 This will permanently delete all your generated study notes for this session. This action cannot be undone.
               </p>
               <div className="modal-actions">
-                <button 
+                <button
                   className="modal-btn secondary"
                   onClick={() => setShowClearConfirm(false)}
                 >
                   Cancel
                 </button>
-                <button 
+                <button
                   className="modal-btn danger"
                   onClick={() => {
                     handleClearNotes();
