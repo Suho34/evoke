@@ -95,10 +95,12 @@ export function parseSyllabus(raw: string): string[] {
       }
     }
 
-    // Fallback: treat non-empty line as a topic if it's meaningful (>3 chars) and looks like a title (<80 chars)
-    if (line.length > 3 && line.length < 80) {
-      // Skip lines that look like metadata
-      if (/^(total|marks|hours|credits|references|textbook|prerequisite)/i.test(line)) {
+    // Fallback: treat non-empty line as a topic if it's meaningful (>3 chars) and looks like a title (<100 chars)
+    if (line.length > 3 && line.length < 100) {
+      // Skip lines that look like administrative metadata or instructions
+      const isBoilerplate = /^(total|marks|hours|credits|references|textbook|prerequisite|assignment|homework|exam|grade|policy|attendance|instructor|office|contact|email|website|deadline|submission|late|academic|integrity|disability|support|resources|schedule|weekly|calendar|meeting|classroom|zoom|link)/i.test(line);
+      
+      if (isBoilerplate) {
         continue;
       }
       topics.push(line);

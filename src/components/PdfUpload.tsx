@@ -155,7 +155,7 @@ async function extractTextFromPdf(file: File): Promise<string> {
       fullText += pageText + "\n\n";
     }
     
-    const cleanedText = fullText.replace(/\s+/g, " ").trim();
+    const cleanedText = fullText.trim();
     
     if (cleanedText.length < 10) {
       throw new Error("Extracted text is too short or empty.");

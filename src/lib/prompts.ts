@@ -133,8 +133,9 @@ ${JSON_EXAMPLE}
 ## Critical Rules
 - ACCURACY: Never fabricate information. If unsure, state uncertainty.
 - JSON ONLY: Do not include any text before or after the JSON. No markdown wrappers like \`\`\`json.
-- IGNORE boilerplate: Skip course administrative info, deadlines, instructor names, grading rubrics.
 - MATCH ACADEMIC LEVEL: Use appropriate terminology for ${levelConfig.label}.
+- COMPLETE COVERAGE: You MUST generate notes for every single topic provided or identified. Do not truncate the list for any reason.
+- IGNORE ADMINISTRATIVE CONTENT: Strictly skip and ignore all non-academic content including grading policies, attendance requirements, instructor contact info, deadlines, and campus policies.
 
 Remember: The example shows the structure. Your output must be parseable by JSON.parse().`;
 }
