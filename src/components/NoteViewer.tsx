@@ -63,7 +63,7 @@ export default function NoteViewer({
   }
 
   const remainingSkeletons = isStreaming
-    ? Math.max(0, expectedTopics - notes.length)
+    ? Math.max(1, expectedTopics - notes.length)
     : 0;
 
   return (
@@ -75,7 +75,7 @@ export default function NoteViewer({
             <span className="count-num">{notes.length}</span>
             <span className="count-label">
               {isStreaming
-                ? `of ${expectedTopics} topics generating...`
+                ? (expectedTopics > 0 ? `of ${expectedTopics} topics generating...` : `generating...`)
                 : `topic${notes.length !== 1 ? "s" : ""} generated`}
             </span>
           </div>

@@ -9,6 +9,7 @@ import { generateFingerprint, getCached, setCached } from "@/lib/cache";
 import type { NoteResponse } from "@/lib/schemas";
 
 export const maxDuration = 60;
+export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   try {
