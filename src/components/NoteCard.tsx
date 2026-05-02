@@ -7,23 +7,18 @@ interface NoteCardProps {
   topicNote: TopicNote;
   index: number;
   onUpdate?: (index: number, newNote: TopicNote) => void;
-  onRegenerate?: (index: number, topic: string) => void;
-  isRegenerating?: boolean;
 }
 
 export default function NoteCard({
   topicNote,
   index,
   onUpdate,
-  onRegenerate,
-  isRegenerating
 }: NoteCardProps) {
   const { topic, notes } = topicNote;
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(["definition", "keyPoints", "examTips"])
   );
   const [copied, setCopied] = useState(false);
-  const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedNotes, setEditedNotes] = useState(notes);
@@ -136,32 +131,6 @@ export default function NoteCard({
           ) : (
             <button className="action-btn" onClick={() => setIsEditing(true)} title="Edit topic">✎</button>
           )}
-          {onRegenerate && (
-            <button
-              className="action-btn"
-              onClick={() => onRegenerate(index, topic)}
-              title="Regenerate this topic"
-              disabled={isRegenerating}
-            >
-              {isRegenerating ? "..." : "↻"}
-            </button>
-          )}
-          <button
-            className={`action-btn feedback-btn ${feedback === "up" ? "active-up" : ""}`}
-            onClick={() => setFeedback(feedback === "up" ? null : "up")}
-            title="Helpful"
-            aria-label="Mark as helpful"
-          >
-            ↑
-          </button>
-          <button
-            className={`action-btn feedback-btn ${feedback === "down" ? "active-down" : ""}`}
-            onClick={() => setFeedback(feedback === "down" ? null : "down")}
-            title="Not helpful"
-            aria-label="Mark as not helpful"
-          >
-            ↓
-          </button>
           <button
             className={`action-btn copy-btn ${copied ? "copied" : ""}`}
             onClick={copyTopic}

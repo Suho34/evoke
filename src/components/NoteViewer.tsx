@@ -11,8 +11,6 @@ interface NoteViewerProps {
   error: string | null;
   onRetry: () => void;
   onUpdateNote?: (index: number, newNote: TopicNote) => void;
-  onRegenerateNote?: (index: number, topic: string) => void;
-  regeneratingIndex?: number | null;
 }
 
 export default function NoteViewer({
@@ -22,8 +20,6 @@ export default function NoteViewer({
   error,
   onRetry,
   onUpdateNote,
-  onRegenerateNote,
-  regeneratingIndex,
 }: NoteViewerProps) {
   if (error) {
     return (
@@ -108,8 +104,6 @@ export default function NoteViewer({
             topicNote={note} 
             index={i} 
             onUpdate={onUpdateNote}
-            onRegenerate={onRegenerateNote}
-            isRegenerating={regeneratingIndex === i}
           />
         ))}
 

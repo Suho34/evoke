@@ -183,72 +183,6 @@ export default function Home() {
     });
   }, []);
 
-  const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null);
-
-  const handleRegenerateSingle = useCallback(
-    async (index: number, targetTopic: string) => {
-      if (!targetTopic) return;
-
-      const safeTarget = targetTopic.length < 5 ? `Topic: ${targetTopic}` : targetTopic;
-
-      setRegeneratingIndex(index);
-      try {
-        const response = await fetch("/api/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ syllabus: safeTarget, level: currentLevel, depth: "deep-dive" }),
-        });
-
-        if (!response.ok) throw new Error("Regeneration failed");
-
-        const reader = response.body?.getReader();
-        if (!reader) throw new Error("No response body");
-
-        const decoder = new TextDecoder();
-        let rawContent = "";
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n").filter(Boolean);
-          for (const line of lines) {
-            const match = line.match(/^0:"(.*)"$/);
-            if (match) {
-              rawContent += match[1];
-            }
-          }
-        }
-
-        if (rawContent) {
-          try {
-            const jsonStr = JSON.parse(`"${rawContent}"`);
-            const final = JSON.parse(repairJSON(jsonStr)); // using repairJSON just in case
-            if (final?.topics && final.topics.length > 0) {
-              const newNote = final.topics[0];
-              setNotes((prev) => {
-                const updated = [...prev];
-                if (updated[index]) {
-                  updated[index] = { ...updated[index], notes: newNote.notes };
-                }
-                return updated;
-              });
-            }
-          } catch (e) {
-            console.error("Failed to parse regenerated note", e);
-          }
-        }
-      } catch (err) {
-        console.error("Regeneration error:", err);
-        alert("Failed to regenerate topic. Please try again.");
-      } finally {
-        setRegeneratingIndex(null);
-      }
-    },
-    [currentLevel]
-  );
-
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   return (
@@ -332,8 +266,6 @@ export default function Home() {
             error={error}
             onRetry={handleRetry}
             onUpdateNote={handleUpdateNote}
-            onRegenerateNote={handleRegenerateSingle}
-            regeneratingIndex={regeneratingIndex}
           />
         </section>
       </div>
